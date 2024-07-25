@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import SearchPage from "./controller/SearchPage";
-import DetailPage from "./controller/DetailPage";
+import SearchPage from "./components/SearchPage";
+import DetailPage from "./components/DetailPage";
 import { SearchProvider } from "./page/context/SearchContext";
 
 function App() {

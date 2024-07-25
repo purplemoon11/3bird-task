@@ -20,7 +20,6 @@ function DetailPage() {
 
   return (
     <div className="container">
-      <h2>Repository Details</h2>
       <div className="grid-container">
         {paginatedResults.length > 0 ? (
           paginatedResults.map((repo) => (

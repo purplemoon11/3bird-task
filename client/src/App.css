@@ -5,6 +5,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+  overflow: hidden; /* This keeps the body itself from scrolling */
 }
 
 .container {
@@ -12,8 +13,10 @@ body {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 form {
@@ -33,16 +36,15 @@ button {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
   width: 100%;
   max-width: 1200px;
-  overflow-x: auto;
 }
 
 .grid-item {
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -54,28 +56,28 @@ button {
 }
 
 .repo-title {
-  margin: 0 0 10px;
-  font-size: 1.2em;
+  margin: 0 0 15px;
+  font-size: 1.4em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .repo-description {
-  margin: 0 0 10px;
-  font-size: 1em;
+  margin: 0 0 15px;
+  font-size: 1.1em;
   color: #555;
 }
 
 .repo-details {
-  margin: 0 0 10px;
-  font-size: 0.9em;
+  margin: 0 0 15px;
+  font-size: 1em;
   color: #333;
 }
 
 .repo-link {
   text-align: right;
-  font-size: 0.9em;
+  font-size: 1em;
   color: #007bff;
   text-decoration: none;
 }
@@ -87,49 +89,64 @@ button {
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
-button.page-button {
+button {
   margin: 0 5px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Responsive adjustments */
+button:hover {
+  background-color: #0056b3;
+}
+
 @media (max-width: 768px) {
-  .form {
-    flex-direction: column;
-    align-items: flex-start;
+  .container {
+    padding: 10px;
   }
 
-  input,
-  select,
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
   button {
-    margin: 5px 0;
-    width: 100%;
-    box-sizing: border-box;
+    font-size: 0.9em;
+    padding: 8px 12px;
   }
 }
 
 @media (max-width: 480px) {
   .grid-container {
     grid-template-columns: 1fr;
+    max-height: 80vh;
     overflow-y: auto;
-    max-height: 90vh;
   }
 
   .repo-title {
-    font-size: 1em;
+    font-size: 1.2em;
   }
 
   .repo-description {
-    font-size: 0.9em;
+    font-size: 1em;
   }
 
   .repo-details {
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
 
   .repo-link {
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
 }
