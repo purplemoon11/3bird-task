@@ -1,9 +1,13 @@
 import express from "express";
 import axios from "axios";
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 //cors
 app.use(
@@ -30,6 +34,9 @@ app.get("/api/search", async (req, res) => {
       "https://api.github.com/search/repositories",
       {
         params: { q, sort, per_page, page },
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+        },
       }
     );
 

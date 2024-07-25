@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SearchContext = createContext();
 
@@ -8,43 +9,54 @@ export const SearchProvider = ({ children }) => {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("stars");
   const [results, setResults] = useState([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [perPage, setPerPage] = useState(10); // Default perPage
+  const [totalResults, setTotalResults] = useState(0);
+  const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
 
-  const fetchAllPages = async (query, sort, perPage) => {
+  const fetchAllPages = async () => {
     let allResults = [];
     let currentPage = 1;
-    let totalResults = 0;
-    let hasMore = true;
+    let totalPages = 1;
 
-    while (hasMore) {
-      const response = await axios.get("http://localhost:5000/api/search", {
-        params: { q: query, sort, per_page: perPage, page: currentPage },
-      });
-      if (response.data.items) {
+    try {
+      while (currentPage <= totalPages) {
+        const response = await axios.get("http://localhost:5000/api/search", {
+          params: { q: query, sort, per_page: perPage, page: currentPage },
+        });
+
+        if (response.data.items.length === 0) break;
+
         allResults = [...allResults, ...response.data.items];
-        totalResults = response.data.total_count;
-        currentPage += 1;
-        hasMore = allResults.length < totalResults;
-      } else {
-        hasMore = false;
+        totalPages = Math.ceil(response.data.total_count / perPage);
+        currentPage++;
       }
+
+      setResults(allResults);
+      setTotalResults(allResults.length);
+
+      // Navigate to the detail page after fetching all data
+      navigate("/repo/detail", {
+        state: {
+          results: allResults,
+          perPage: perPage,
+          totalResults: allResults.length,
+        },
+      });
+    } catch (error) {
+      if (error.response?.status === 403) {
+        alert("Rate limit exceeded. Please try again later.");
+      } else {
+        console.error("Error fetching search results:", error);
+      }
+      setResults([]);
+      setTotalResults(0);
     }
-    return allResults;
   };
 
   const searchRepos = async (e) => {
     if (e) e.preventDefault();
-    try {
-      const allResults = await fetchAllPages(query, sort, perPage);
-      setResults(allResults);
-      setTotalPages(Math.ceil(allResults.length / perPage));
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-      setResults([]);
-      setTotalPages(0);
-    }
+    await fetchAllPages();
   };
 
   return (
@@ -56,10 +68,10 @@ export const SearchProvider = ({ children }) => {
         setSort,
         results,
         setResults,
-        totalPages,
-        setTotalPages,
+        totalResults,
+        setTotalResults,
         perPage,
-        setPerPage, // Add setPerPage to context
+        setPerPage,
         page,
         setPage,
         searchRepos,

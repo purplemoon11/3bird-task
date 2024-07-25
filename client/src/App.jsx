@@ -1,18 +1,18 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SearchProvider } from "./page/context/SearchContext";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SearchPage from "./controller/SearchPage";
-import DetailPage from "./controller/SearchPage";
+import DetailPage from "./controller/DetailPage";
+import { SearchProvider } from "./page/context/SearchContext";
 
 function App() {
   return (
-    <SearchProvider>
-      <Router>
+    <Router>
+      <SearchProvider>
         <Routes>
           <Route path="/" element={<SearchPage />} />
           <Route path="/repo/detail" element={<DetailPage />} />
         </Routes>
-      </Router>
-    </SearchProvider>
+      </SearchProvider>
+    </Router>
   );
 }
 

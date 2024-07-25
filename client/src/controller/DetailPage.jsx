@@ -1,16 +1,30 @@
-import { useLocation } from "react-router-dom";
+import { useContext } from "react";
+import SearchContext from "../page/context/SearchContext";
+import "../App.css";
 
 function DetailPage() {
-  const location = useLocation();
-  const { results } = location.state || { results: [] };
-  console.log(results, "data");
+  const { results, perPage, page, setPage, totalResults } =
+    useContext(SearchContext);
+
+  const totalPages = Math.ceil(totalResults / perPage);
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  // Calculate the start and end indices for the current page
+  const startIndex = (page - 1) * perPage;
+  const endIndex = startIndex + perPage;
+  const paginatedResults = results.slice(startIndex, endIndex);
 
   return (
     <div className="container">
       <h2>Repository Details</h2>
       <div className="grid-container">
-        {results.length > 0 ? (
-          results.map((repo) => (
+        {paginatedResults.length > 0 ? (
+          paginatedResults.map((repo) => (
             <div key={repo.id} className="grid-item">
               <h3 className="repo-title">{repo.name}</h3>
               <p className="repo-description">{repo.description}</p>
@@ -35,6 +49,14 @@ function DetailPage() {
           ))
         ) : (
           <p>No results found</p>
+        )}
+      </div>
+      <div className="pagination">
+        {page > 1 && (
+          <button onClick={() => handlePageChange(page - 1)}>Previous</button>
+        )}
+        {page < totalPages && (
+          <button onClick={() => handlePageChange(page + 1)}>Next</button>
         )}
       </div>
     </div>
