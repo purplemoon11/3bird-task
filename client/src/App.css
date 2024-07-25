@@ -1,42 +1,135 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+input,
+select,
+button {
+  margin: 5px;
+  padding: 5px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 1200px;
+  overflow-x: auto;
+}
+
+.grid-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  color: black;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.repo-title {
+  margin: 0 0 10px;
+  font-size: 1.2em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.repo-description {
+  margin: 0 0 10px;
+  font-size: 1em;
+  color: #555;
+}
+
+.repo-details {
+  margin: 0 0 10px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.repo-link {
+  text-align: right;
+  font-size: 0.9em;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.repo-link:hover {
+  text-decoration: underline;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+button.page-button {
+  margin: 0 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  to {
-    transform: rotate(360deg);
+
+  input,
+  select,
+  button {
+    margin: 5px 0;
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media (max-width: 480px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+    max-height: 90vh;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .repo-title {
+    font-size: 1em;
+  }
 
-.read-the-docs {
-  color: #888;
+  .repo-description {
+    font-size: 0.9em;
+  }
+
+  .repo-details {
+    font-size: 0.8em;
+  }
+
+  .repo-link {
+    font-size: 0.8em;
+  }
 }
