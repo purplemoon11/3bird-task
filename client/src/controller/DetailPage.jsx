@@ -14,7 +14,6 @@ function DetailPage() {
     }
   };
 
-  // Calculate the start and end indices for the current page
   const startIndex = (page - 1) * perPage;
   const endIndex = startIndex + perPage;
   const paginatedResults = results.slice(startIndex, endIndex);

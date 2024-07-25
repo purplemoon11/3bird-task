@@ -20,22 +20,18 @@ export const SearchProvider = ({ children }) => {
     let totalPages = 1;
 
     try {
-      while (currentPage <= totalPages) {
-        const response = await axios.get("http://localhost:5000/api/search", {
+      // Fetch the first page of results
+      const initialResponse = await axios.get(
+        "http://localhost:5000/api/search",
+        {
           params: { q: query, sort, per_page: perPage, page: currentPage },
-        });
+        }
+      );
 
-        if (response.data.items.length === 0) break;
+      allResults = [...initialResponse.data.items];
+      totalPages = Math.ceil(initialResponse.data.total_count / perPage);
 
-        allResults = [...allResults, ...response.data.items];
-        totalPages = Math.ceil(response.data.total_count / perPage);
-        currentPage++;
-      }
-
-      setResults(allResults);
-      setTotalResults(allResults.length);
-
-      // Navigate to the detail page after fetching all data
+      // Navigate to the detail page with the initial results
       navigate("/repo/detail", {
         state: {
           results: allResults,
@@ -43,6 +39,26 @@ export const SearchProvider = ({ children }) => {
           totalResults: allResults.length,
         },
       });
+
+      // Fetch additional pages in the background
+      while (currentPage < totalPages) {
+        currentPage++;
+        try {
+          const response = await axios.get("http://localhost:5000/api/search", {
+            params: { q: query, sort, per_page: perPage, page: currentPage },
+          });
+
+          if (response.data.items.length === 0) break;
+
+          allResults = [...allResults, ...response.data.items];
+          setResults(allResults); // Update results with new data
+        } catch (error) {
+          console.error("Error fetching additional pages:", error);
+          break;
+        }
+      }
+
+      setTotalResults(allResults.length); // Update total results after all pages are fetched
     } catch (error) {
       if (error.response?.status === 403) {
         alert("Rate limit exceeded. Please try again later.");
